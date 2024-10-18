@@ -2,95 +2,76 @@ import './App.css'
 import { Input } from "@/components/ui/input"
 import { Button } from "@/components/ui/button"
 import { ThemeProvider } from "@/components/ui/theme-provider"
-import {
-  Table,
-  TableBody,
-  TableCaption,
-  TableCell,
-  TableFooter,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from "@/components/ui/table"
+import { Task, columns } from "./columns"
+import { useState, useEffect } from 'react'
+import { DataTable } from "./data-table"
 
 
-const invoices = [
-  {
-    invoice: "INV001",
-    paymentStatus: "Paid",
-    totalAmount: "$250.00",
-    paymentMethod: "Credit Card",
-  },
-  {
-    invoice: "INV002",
-    paymentStatus: "Pending",
-    totalAmount: "$150.00",
-    paymentMethod: "PayPal",
-  },
-  {
-    invoice: "INV003",
-    paymentStatus: "Unpaid",
-    totalAmount: "$350.00",
-    paymentMethod: "Bank Transfer",
-  },
-  {
-    invoice: "INV004",
-    paymentStatus: "Paid",
-    totalAmount: "$450.00",
-    paymentMethod: "Credit Card",
-  },
-  {
-    invoice: "INV005",
-    paymentStatus: "Paid",
-    totalAmount: "$550.00",
-    paymentMethod: "PayPal",
-  },
-  {
-    invoice: "INV006",
-    paymentStatus: "Pending",
-    totalAmount: "$200.00",
-    paymentMethod: "Bank Transfer",
-  },
-  {
-    invoice: "INV007",
-    paymentStatus: "Unpaid",
-    totalAmount: "$300.00",
-    paymentMethod: "Credit Card",
-  },
-]
+// TODO: Combobox instead of status box, and then a deletion tab.
+
+
+async function getData(): Promise<Task[]> {
+  return [
+    {
+      id: 1,
+      task: "Walk the bubby then take out the trash",
+      status: "",
+      dateCreated: "10/18/2024",
+    },
+  ]
+}
+
 
 function App() {
+
+  const [data, setData] = useState<Task[]>([])
+  const [newTask, setNewTask] = useState("")
+
+
+  useEffect(() => {
+    async function fetchData(){
+      const tasksData = await getData()
+      setData(tasksData)
+    }
+    fetchData()
+  }, [])
+
+  function handleInput(event: { target: { value: string } }){
+    setNewTask(event.target.value)
+  }
+
+  function getDate(){
+    let today = new Date();
+    const dd = String(today.getDate()).padStart(2, '0');
+    const mm = String(today.getMonth() + 1).padStart(2, '0'); 
+    const yyyy = today.getFullYear();
+    today =  mm + '/' + dd + '/' + yyyy;
+    return today
+    
+  }
+
+  function addTask(){
+    const generateTask: Task =
+    {
+      id: data.length + 1,
+      task: newTask,
+      status: "unchecked",
+      dateCreated: getDate().toString()
+    }
+    setData([...data, generateTask]);
+    setNewTask("")
+  }
+
   return (
     <ThemeProvider defaultTheme="dark">
-      <div className="flex h-screen mt-32">
-        <div className="bg-zinc dark w-80"  >
-          <Input type="text" placeholder="Enter Your Task!" />
+      <div className="flex-col items-center h-screen mt-32">
+        <div className="flex bg-zinc dark w-500"  >
+          <Input className="mr-10" type="text" value={newTask} onChange={handleInput} placeholder="Enter Your Task!" />
+          <Button variant="outline" onClick={addTask}> Add Task </Button> 
         </div>
-        <div className="bg-zinc dark flex ml-4 " >
-          <Button variant="outline"> Add Task </Button> 
+        <div className="flex-col mt-10">
+          {data.length > 0 ? <DataTable columns={columns} data={data} /> : <p>Loading...</p>}
         </div>
-        <div>
-          <Table>
-        <TableHeader>
-          <TableRow>
-            <TableHead className="w-[100px]">Task</TableHead>
-            <TableHead>Status</TableHead>
-            <TableHead>Method</TableHead>
-            <TableHead className="text-right">Amount</TableHead>
-          </TableRow>
-        </TableHeader>
-        <TableBody>
-          {invoices.map((invoice) => (
-            <TableRow key={invoice.invoice}>
-              <TableCell className="font-medium">{invoice.invoice}</TableCell>
-              <TableCell>{invoice.paymentStatus}</TableCell>
-              <TableCell>{invoice.paymentMethod}</TableCell>
-              <TableCell className="text-right">{invoice.totalAmount}</TableCell>
-            </TableRow>
-          ))}
-        </TableBody>
-      </Table>
-      </div>
       </div>
     </ThemeProvider>
   )
