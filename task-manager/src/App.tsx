@@ -6,19 +6,8 @@ import { Task, columns } from "./columns"
 import { useState, useEffect } from 'react'
 import { DataTable } from "./data-table"
 
-
-// TODO: Combobox instead of status box, and then a deletion tab.
-
-
 async function getData(): Promise<Task[]> {
-  return [
-    {
-      id: 1,
-      task: "Walk the bubby then take out the trash",
-      status: "",
-      dateCreated: "10/18/2024",
-    },
-  ]
+  return []
 }
 
 
@@ -40,13 +29,18 @@ function App() {
     setNewTask(event.target.value)
   }
 
+  function handleDelete(id: number) {
+    const filteredData = data.filter((task) => task.id !== id)
+    setData(filteredData)
+  }
+
   function getDate(){
-    let today = new Date();
+    const today = new Date();
     const dd = String(today.getDate()).padStart(2, '0');
     const mm = String(today.getMonth() + 1).padStart(2, '0'); 
     const yyyy = today.getFullYear();
-    today =  mm + '/' + dd + '/' + yyyy;
-    return today
+    const final =  mm + '/' + dd + '/' + yyyy;
+    return final
     
   }
 
@@ -55,13 +49,23 @@ function App() {
     {
       id: data.length + 1,
       task: newTask,
-      status: "unchecked",
+      status: "backlog",
       dateCreated: getDate().toString()
     }
     setData([...data, generateTask]);
     setNewTask("")
   }
 
+
+  function handleStatusChange(id: number, newStatus: string) {
+    const updatedData = data.map((task) =>
+      task.id === id ? { ...task, status: newStatus } : task
+    )
+    setData(updatedData)
+  }
+  
+
+  
   return (
     <ThemeProvider defaultTheme="dark">
       <div className="flex-col items-center h-screen mt-32">
@@ -70,7 +74,7 @@ function App() {
           <Button variant="outline" onClick={addTask}> Add Task </Button> 
         </div>
         <div className="flex-col mt-10">
-          {data.length > 0 ? <DataTable columns={columns} data={data} /> : <p>Loading...</p>}
+          {data.length > 0 ? <DataTable columns={columns(handleDelete, handleStatusChange)} data={data} /> : <p>Add a Task!</p>}
         </div>
       </div>
     </ThemeProvider>
