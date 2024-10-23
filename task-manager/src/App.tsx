@@ -6,7 +6,10 @@ import { ThemeProvider } from '@/components/ui/theme-provider'
 import { Task, columns } from './columns'
 import { useState, useEffect } from 'react'
 import { DataTable } from './data-table'
+import { Header } from './header.tsx'
 import { toast, Toaster } from 'react-hot-toast'
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom'
+import { Contact } from './ContactUs.tsx'
 
 async function getData(): Promise<Task[]> {
     return []
@@ -76,8 +79,12 @@ function App() {
 
     return (
         <ThemeProvider defaultTheme="dark">
+            <Header />
             <Toaster position="top-center" reverseOrder={false} />
             <div className="flex-col items-center h-screen mt-32">
+                <h1 className="mb-20 text-4xl font-extrabold leading-none tracking-tight text-gray-900 md:text-5xl lg:text-6xl dark:text-white">
+                    Personal Task Manager
+                </h1>
                 <div className="flex bg-zinc dark w-500">
                     <Input
                         className="mr-10"
