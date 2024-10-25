@@ -1,6 +1,11 @@
 import * as React from 'react'
 import { Header } from './header.tsx'
 
-export function ContactUs() {
-    return <div>Test</div>
+export default function ContactUs() {
+    return (
+        <div>
+            <Header />
+            <div>Test</div>
+        </div>
+    )
 }

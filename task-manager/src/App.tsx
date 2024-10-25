@@ -1,5 +1,6 @@
 /* eslint-disable react/react-in-jsx-scope */
 import './App.css'
+import ContactUs from './ContactUs'
 import { Input } from '@/components/ui/input'
 import { Button } from '@/components/ui/button'
 import { ThemeProvider } from '@/components/ui/theme-provider'
@@ -8,14 +9,13 @@ import { useState, useEffect } from 'react'
 import { DataTable } from './data-table'
 import { Header } from './header.tsx'
 import { toast, Toaster } from 'react-hot-toast'
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom'
-import { Contact } from './ContactUs.tsx'
+import { BrowserRouter, Routes, Route } from 'react-router-dom'
 
 async function getData(): Promise<Task[]> {
     return []
 }
 
-function App() {
+function TaskManager() {
     const [data, setData] = useState<Task[]>([])
     const [newTask, setNewTask] = useState('')
 
@@ -78,38 +78,49 @@ function App() {
     }
 
     return (
-        <ThemeProvider defaultTheme="dark">
-            <Header />
-            <Toaster position="top-center" reverseOrder={false} />
-            <div className="flex-col items-center h-screen mt-32">
-                <h1 className="mb-20 text-4xl font-extrabold leading-none tracking-tight text-gray-900 md:text-5xl lg:text-6xl dark:text-white">
-                    Personal Task Manager
-                </h1>
-                <div className="flex bg-zinc dark w-500">
-                    <Input
-                        className="mr-10"
-                        type="text"
-                        value={newTask}
-                        onChange={handleInput}
-                        placeholder="Enter Your Task!"
-                    />
-                    <Button variant="outline" onClick={addTask}>
-                        {' '}
-                        Add Task{' '}
-                    </Button>
-                </div>
-                <div className="flex-col mt-10">
-                    {data.length > 0 ? (
-                        <DataTable
-                            columns={columns(handleDelete, handleStatusChange)}
-                            data={data}
-                        />
-                    ) : (
-                        <p>No tasks found. Start by adding a task!</p>
-                    )}
-                </div>
+        <div className="flex-col items-center h-screen mt-32">
+            <h1 className="mb-20 text-4xl font-extrabold leading-none tracking-tight text-gray-900 md:text-5xl lg:text-6xl dark:text-white">
+                Personal Task Manager
+            </h1>
+            <div className="flex bg-zinc dark w-500">
+                <Input
+                    className="mr-10"
+                    type="text"
+                    value={newTask}
+                    onChange={handleInput}
+                    placeholder="Enter Your Task!"
+                />
+                <Button variant="outline" onClick={addTask}>
+                    {' '}
+                    Add Task{' '}
+                </Button>
             </div>
-        </ThemeProvider>
+            <div className="flex-col mt-10">
+                {data.length > 0 ? (
+                    <DataTable
+                        columns={columns(handleDelete, handleStatusChange)}
+                        data={data}
+                    />
+                ) : (
+                    <p>No tasks found. Start by adding a task!</p>
+                )}
+            </div>
+        </div>
+    )
+}
+
+function App() {
+    return (
+        <BrowserRouter>
+            <ThemeProvider defaultTheme="dark">
+                <Header />
+                <Toaster position="top-center" reverseOrder={false} />
+                <Routes>
+                    <Route path="/" element={<TaskManager />} />
+                    <Route path="/contact" element={<ContactUs />} />
+                </Routes>
+            </ThemeProvider>
+        </BrowserRouter>
     )
 }
 

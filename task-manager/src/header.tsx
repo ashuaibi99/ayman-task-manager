@@ -1,4 +1,6 @@
 import * as React from 'react'
+import App from './App'
+import ContactUs from './ContactUs'
 import { Link } from 'react-router-dom'
 
 export function Header() {
@@ -6,14 +8,10 @@ export function Header() {
         <header className="w-full fixed top-0 left-0 z-50">
             <nav className="bg-white border-gray-200 px-4 lg:px-6 py-2.5 dark:bg-gray-800">
                 <div className="flex flex-wrap justify-between items-center mx-auto max-w-screen-xl">
-                    <a
-                        href="http://127.0.0.1:5173/"
-                        className="flex items-center"
-                    >
+                    <a href="/" className="flex items-center">
                         <img
                             src="/cloud-fog-svgrepo-com.svg"
                             className="mr-3 h-6 sm:h-9"
-                            alt="Flowbite Logo"
                         />
                         <span className="self-center text-xl font-semibold whitespace-nowrap dark:text-white">
                             Tasker
@@ -67,12 +65,12 @@ export function Header() {
                                 </a>
                             </li>
                             <li>
-                                <a
-                                    href="#"
+                                <Link
+                                    to="/contact"
                                     className="block py-2 pr-4 pl-3 text-gray-700 border-b border-gray-100 hover:bg-gray-50 lg:hover:bg-transparent lg:border-0 lg:hover:text-primary-700 lg:p-0 dark:text-gray-400 lg:dark:hover:text-white dark:hover:bg-gray-700 dark:hover:text-white lg:dark:hover:bg-transparent dark:border-gray-700"
                                 >
                                     Contact
-                                </a>
+                                </Link>
                             </li>
                         </ul>
                     </div>
