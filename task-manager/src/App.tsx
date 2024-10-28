@@ -1,6 +1,7 @@
 /* eslint-disable react/react-in-jsx-scope */
 import './App.css'
 import ContactUs from './ContactUs'
+import LogIn from './LogIn'
 import { Input } from '@/components/ui/input'
 import { Button } from '@/components/ui/button'
 import { ThemeProvider } from '@/components/ui/theme-provider'
@@ -8,8 +9,8 @@ import { Task, columns } from './columns'
 import { useState, useEffect } from 'react'
 import { DataTable } from './data-table'
 import { Header } from './header.tsx'
-import { toast, Toaster } from 'react-hot-toast'
 import { BrowserRouter, Routes, Route } from 'react-router-dom'
+import { Toaster, toast } from 'sonner'
 
 async function getData(): Promise<Task[]> {
     return []
@@ -47,6 +48,7 @@ function TaskManager() {
 
     function toastMessage() {
         toast.error('Error: Empty Task!', {
+            duration: 2000,
             style: {
                 borderRadius: '10px',
                 background: '#333',
@@ -114,10 +116,11 @@ function App() {
         <BrowserRouter>
             <ThemeProvider defaultTheme="dark">
                 <Header />
-                <Toaster position="top-center" reverseOrder={false} />
+                <Toaster position="top-center" />
                 <Routes>
                     <Route path="/" element={<TaskManager />} />
                     <Route path="/contact" element={<ContactUs />} />
+                    <Route path="/login" element={<LogIn />} />
                 </Routes>
             </ThemeProvider>
         </BrowserRouter>
