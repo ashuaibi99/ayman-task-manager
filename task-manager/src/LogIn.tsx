@@ -58,11 +58,15 @@ export default function LogIn() {
                     <CardContent className="space-y-2">
                         <div className="space-y-1">
                             <Label htmlFor="current">Username</Label>
-                            <Input id="current" />
+                            <Input id="current" placeholder="Create Username" />
                         </div>
                         <div className="space-y-1">
                             <Label htmlFor="new">Password</Label>
-                            <Input id="new" type="password" />
+                            <Input
+                                id="new"
+                                type="password"
+                                placeholder="Create Password"
+                            />
                         </div>
                     </CardContent>
                     <CardFooter>
