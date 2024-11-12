@@ -9,10 +9,61 @@ import {
     CardTitle,
 } from '@/components/ui/card'
 import { Input } from '@/components/ui/input'
+import { useState } from 'react'
 import { Label } from '@/components/ui/label'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
+import { toast } from 'sonner'
 
 export default function LogIn() {
+    const [username, setUsername] = useState('')
+    const [password, setPassword] = useState('')
+
+    const handleLogin = async () => {
+        try {
+            const response = await fetch(
+                'http://localhost:5050/profile/login',
+                {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({ username, password }),
+                }
+            )
+
+            const data = await response.json()
+            if (response.ok) {
+                toast.success(`Logged in Successfully!`, {
+                    duration: 2000,
+                    style: {
+                        borderRadius: '10px',
+                        background: '#333',
+                        color: '#fff',
+                    },
+                })
+                console.log(data)
+            } else {
+                toast.error(`Login failed: ${data.message}`, {
+                    duration: 2000,
+                    style: {
+                        borderRadius: '10px',
+                        background: '#333',
+                        color: '#fff',
+                    },
+                })
+            }
+        } catch (error) {
+            toast.error(`Error Logging In: ${error}`, {
+                duration: 2000,
+                style: {
+                    borderRadius: '10px',
+                    background: '#333',
+                    color: '#fff',
+                },
+            })
+        }
+    }
+
     return (
         <Tabs defaultValue="login" className="w-[400px]">
             <TabsList className="grid w-full grid-cols-2">
@@ -30,7 +81,11 @@ export default function LogIn() {
                     <CardContent className="space-y-2">
                         <div className="space-y-1">
                             <Label htmlFor="username">Username</Label>
-                            <Input id="name" placeholder="Enter Username" />
+                            <Input
+                                id="name"
+                                placeholder="Enter Username"
+                                onChange={(e) => setUsername(e.target.value)}
+                            />
                         </div>
                         <div className="space-y-1">
                             <Label htmlFor="password">Password</Label>
@@ -38,11 +93,12 @@ export default function LogIn() {
                                 id="password"
                                 type="password"
                                 placeholder="Enter Password"
+                                onChange={(e) => setPassword(e.target.value)}
                             />
                         </div>
                     </CardContent>
                     <CardFooter>
-                        <Button>Log In</Button>
+                        <Button onClick={handleLogin}>Log In</Button>
                     </CardFooter>
                 </Card>
             </TabsContent>
@@ -58,7 +114,11 @@ export default function LogIn() {
                     <CardContent className="space-y-2">
                         <div className="space-y-1">
                             <Label htmlFor="current">Username</Label>
-                            <Input id="current" placeholder="Create Username" />
+                            <Input
+                                id="current"
+                                placeholder="Create Username"
+                                onChange={(e) => setUsername(e.target.value)}
+                            />
                         </div>
                         <div className="space-y-1">
                             <Label htmlFor="new">Password</Label>
@@ -66,6 +126,7 @@ export default function LogIn() {
                                 id="new"
                                 type="password"
                                 placeholder="Create Password"
+                                onChange={(e) => setPassword(e.target.value)}
                             />
                         </div>
                     </CardContent>
