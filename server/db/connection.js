@@ -17,6 +17,6 @@ try{
     console.error("bruh");
 }
 
-let db = client.db("test");
+let db = client.db("users");
 
 export default db;

@@ -6,8 +6,8 @@ const PORT = 5050;
 const app = express();
 
 app.use(cors());
-app.use(express.json);
-app.use("/profiles", profiles);
+app.use(express.json());
+app.use("/profile", profiles);
 
 
 app.listen(PORT, () => {
