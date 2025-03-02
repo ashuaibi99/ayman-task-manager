@@ -12,27 +12,53 @@ import { Header } from './header.tsx'
 import { BrowserRouter, Routes, Route } from 'react-router-dom'
 import { Toaster, toast } from 'sonner'
 
-async function getData(): Promise<Task[]> {
-    return []
-}
-
 function TaskManager() {
     const [data, setData] = useState<Task[]>([])
     const [newTask, setNewTask] = useState('')
+    const username = localStorage.getItem('user')
 
     useEffect(() => {
         async function fetchData() {
-            const tasksData = await getData()
-            setData(tasksData)
+            if (!username) {
+                toast.error('No user found. Please log in.')
+                return
+            }
+
+            try {
+                const response = await fetch(
+                    `http://localhost:5050/profile/tasks/${username}`
+                )
+
+                if (!response.ok) {
+                    throw new Error('Failed to fetch tasks')
+                }
+
+                const tasks = await response.json()
+                console.log(tasks[0])
+
+                const formattedTasks = tasks.map((task, index) => ({
+                    id: index + 1,
+                    task: task.task,
+                    status: task.status,
+                    dateCreated: task.dateCreated,
+                }))
+
+                setData(formattedTasks)
+            } catch (error) {
+                console.error('Error fetching tasks:', error)
+                setData([])
+            }
         }
+
         fetchData()
-    }, [])
+    }, [username])
 
     function handleInput(event: { target: { value: string } }) {
         setNewTask(event.target.value)
     }
 
     function handleDelete(id: number) {
+        console.log(id)
         const filteredData = data.filter((task) => task.id !== id)
         setData(filteredData)
     }

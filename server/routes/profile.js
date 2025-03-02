@@ -82,4 +82,26 @@ router.get("/tasks/:username", async (req, res) => {
     }
 });
 
+router.put("/deleteTask/:username", async (req, res) => {
+    try {
+        const { username } = req.params;
+
+        if (!username) {
+            return res.status(400).json({ message: "Username is required" });
+        }
+
+        const collection = await db.collection("profiles"); 
+        const profile = await collection.findOne({ username });
+
+        if (!profile) {
+            return res.status(404).json({ message: "No profile found" });
+        }
+
+        res.status(200).json(profile.tasks);
+    } catch (error) {
+        console.error("Error fetching tasks:", error);
+        res.status(500).json({ message: "Internal server error" });
+    }
+});
+
 export default router;

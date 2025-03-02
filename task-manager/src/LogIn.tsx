@@ -33,6 +33,7 @@ export default function LogIn() {
 
             const data = await response.json()
             if (response.ok) {
+                localStorage.setItem('user', username)
                 toast.success(`Logged in Successfully!`, {
                     duration: 2000,
                     style: {
@@ -41,7 +42,6 @@ export default function LogIn() {
                         color: '#fff',
                     },
                 })
-                console.log(data)
             } else {
                 toast.error(`Login failed: ${data.message}`, {
                     duration: 2000,
@@ -54,6 +54,55 @@ export default function LogIn() {
             }
         } catch (error) {
             toast.error(`Error Logging In: ${error}`, {
+                duration: 2000,
+                style: {
+                    borderRadius: '10px',
+                    background: '#333',
+                    color: '#fff',
+                },
+            })
+        }
+    }
+
+    const handleAccountCreation = async () => {
+        try {
+            const response = await fetch(
+                'http://localhost:5050/profile/create',
+                {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({ username, password }),
+                }
+            )
+
+            const data = await response.json()
+            if (response.ok) {
+                toast.success(
+                    `Account Created Successfully! Login to Continue!`,
+                    {
+                        duration: 2000,
+                        style: {
+                            borderRadius: '10px',
+                            background: '#333',
+                            color: '#fff',
+                        },
+                    }
+                )
+                console.log(data)
+            } else {
+                toast.error(`Account Creation Failed: ${data.message}`, {
+                    duration: 2000,
+                    style: {
+                        borderRadius: '10px',
+                        background: '#333',
+                        color: '#fff',
+                    },
+                })
+            }
+        } catch (error) {
+            toast.error(`Error Creating Account: ${error}`, {
                 duration: 2000,
                 style: {
                     borderRadius: '10px',
@@ -131,7 +180,9 @@ export default function LogIn() {
                         </div>
                     </CardContent>
                     <CardFooter>
-                        <Button>Create Account</Button>
+                        <Button onClick={handleAccountCreation}>
+                            Create Account
+                        </Button>
                     </CardFooter>
                 </Card>
             </TabsContent>
